@@ -7,14 +7,21 @@
     </slot>
     <div class="g-label-column-rows">
       <div
+        v-for="({ label, labelstyle}, index) in getChartRows()"
+        :key="`${label}_${index}`"
+        class="g-label-column-row"
+        :style="getRowLabelStyle(index, labelstyle)"
+      >
+      <!-- <div
         v-for="({ label }, index) in getChartRows()"
         :key="`${label}_${index}`"
         class="g-label-column-row"
-        :style="{
+        :style="getRowLabelStyle(index)"
+      > -->
+      <!-- :style="{
           background: index % 2 === 0 ? colors.ternary : colors.quartenary,
           height: `${rowHeight}px`
-        }"
-      >
+        }" -->
         <slot name="label-column-row" :label="label">
           <span>{{ label }}</span>
         </slot>
@@ -26,9 +33,21 @@
 <script setup lang="ts">
 import provideGetChartRows from "../provider/provideGetChartRows"
 import provideConfig from "../provider/provideConfig.js"
+import { computed } from "vue"
 
 const { font, colors, labelColumnTitle, rowHeight } = provideConfig()
 const getChartRows = provideGetChartRows()
+// console.log('GGanttLabelColumn.vue getChartRows', getChartRows())
+
+const getRowLabelStyle = (index: number, labelstyle: any) => {
+  // console.log('getRowLabelStyle', index, labelstyle)
+  return {
+    background: index % 2 === 0 ? colors.value.ternary : colors.value.quartenary,
+    height: `${rowHeight}px`,
+    ...labelstyle
+  }
+}
+
 </script>
 
 <style>

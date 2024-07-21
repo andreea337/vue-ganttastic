@@ -38,9 +38,12 @@ import { BAR_CONTAINER_KEY } from "../provider/symbols"
 
 const props = defineProps<{
   label: string
-  bars: GanttBarObject[]
+  bars: GanttBarObject[] 
   highlightOnHover?: boolean
+  labelStyle?: { type: Object }
 }>()
+
+// console.log('GGanttRow.vue props', props)
 
 const emit = defineEmits<{
   (e: "drop", value: { e: MouseEvent; datetime: string | Date }): void
@@ -50,12 +53,21 @@ const { rowHeight, colors, labelColumnTitle } = provideConfig()
 const { highlightOnHover } = toRefs(props)
 const isHovering = ref(false)
 
+//every row label style
 const rowStyle = computed(() => {
   return {
     height: `${rowHeight.value}px`,
-    background: highlightOnHover?.value && isHovering.value ? colors.value.hoverHighlight : null
+    background: highlightOnHover?.value && isHovering.value ? colors.value.hoverHighlight : null,
   } as StyleValue
 })
+
+// const rowLabelStyle = computed(() => {
+//   return {
+//     background: colors.value.primary,
+//     color: colors.value.text,
+//     ...props.labelStyle
+//   } as StyleValue
+// })
 
 const { mapPositionToTime } = useTimePositionMapping()
 const barContainer: Ref<HTMLElement | null> = ref(null)

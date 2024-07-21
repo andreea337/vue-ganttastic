@@ -124,7 +124,7 @@ const props = withDefaults(defineProps<GGanttChartProps>(), {
   highlightedUnits: () => [],
   font: "inherit",
   labelColumnTitle: "",
-  labelColumnWidth: "150px"
+  labelColumnWidth: "300px"
 })
 
 const emit = defineEmits<{
@@ -161,30 +161,35 @@ const colors = computed(() =>
     ? colorScheme.value
     : colorSchemes[colorScheme.value as ColorSchemeKey] || colorSchemes.default
 )
+type ChartRowWithStyle = ChartRow & { labelstyle?: {} };
 const getChartRows = () => {
   const defaultSlot = slots.default?.()
-  const allBars: ChartRow[] = []
-
+  // const allBars: ChartRow[] = []
+  const allBars: ChartRowWithStyle[] = []
+  // console.log('getChartRows', defaultSlot)
   if (!defaultSlot) {
     return allBars
   }
   defaultSlot.forEach((child) => {
     if (child.props?.bars) {
-      const { label, bars } = child.props
-      allBars.push({ label, bars })
+      const { label, bars, labelstyle} = child.props
+      allBars.push({ label, bars, labelstyle})
+      // console.log('child.props', labelstyle, child.props)
       // if using v-for to generate rows, rows will be children of a single "fragment" v-node:
     } else if (Array.isArray(child.children)) {
+      // console.log('child.props', child.children)
       child.children.forEach((grandchild) => {
         const granchildNode = grandchild as {
           props?: ChartRow
         }
         if (granchildNode?.props?.bars) {
-          const { label, bars } = granchildNode.props
-          allBars.push({ label, bars })
+          const { label, bars, labelstyle} = granchildNode.props
+          allBars.push({ label, bars, labelstyle})
         }
       })
     }
   })
+  // console.log('getChartRows allBars', allBars)
   return allBars
 }
 

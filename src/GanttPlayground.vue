@@ -1,237 +1,365 @@
 <template>
-  <g-gantt-chart
-    :chart-start="chartStart"
-    :chart-end="chartEnd"
-    precision="week"
-    :row-height="40"
-    grid
-    current-time
-    width="100%"
-    bar-start="beginDate"
-    bar-end="endDate"
-    :date-format="format"
-    @click-bar="onClickBar($event.bar, $event.e, $event.datetime)"
-    @mousedown-bar="onMousedownBar($event.bar, $event.e, $event.datetime)"
-    @dblclick-bar="onMouseupBar($event.bar, $event.e, $event.datetime)"
-    @mouseenter-bar="onMouseenterBar($event.bar, $event.e)"
-    @mouseleave-bar="onMouseleaveBar($event.bar, $event.e)"
-    @dragstart-bar="onDragstartBar($event.bar, $event.e)"
-    @drag-bar="onDragBar($event.bar, $event.e)"
-    @dragend-bar="onDragendBar($event.bar, $event.e, $event.movedBars)"
-    @contextmenu-bar="onContextmenuBar($event.bar, $event.e, $event.datetime)"
-  >
-    <g-gantt-row label="My row to test" :bars="bars1" highlight-on-hover />
-    <g-gantt-row label="My another new row to test" highlight-on-hover :bars="bars2" />
-    <g-gantt-row label="just another row to test gantt" highlight-on-hover :bars="bars3" />
-    <g-gantt-row
-      label="errors teach us, and debugging makes us stronger!"
-      highlight-on-hover
-      :bars="bars4"
-    />
-  </g-gantt-chart>
-
-  <button type="button" @click="addBar()">Add bar</button>
-  <button type="button" @click="deleteBar()">Delete bar</button>
+ <g-gantt-chart
+      chart-start="2024-01-01"
+      chart-end="2024-12-31"
+      precision="month"
+      bar-start="myBeginDate"
+      bar-end="myEndDate"
+      date-format="YYYY-MM-DD"
+      color-scheme="vue"
+      :current-time="true"
+      current-time-label="現在"
+      :no-overlap="true"
+      :grid="true"
+      :row-height="60"
+      label-column-title="SYSTEM"
+      >
+      <!-- <g-gantt-row
+        v-for="(row, index) in rawdata"
+        :key="`${row.label}`+ index"
+        :label="row.label"
+        :bars="row.bars"
+        :highlight-on-hover="true"
+        :labelstyle="titleStyle"
+      /> -->
+      <g-gantt-row label="PLM系統基本架構" :bars="row1BarList" :highlight-on-hover="true" :labelstyle="titleStyle"/>
+      <g-gantt-row label="APQP" :bars="row2BarList" :highlight-on-hover="true" :labelstyle="titleStyle"/>
+      <g-gantt-row label="APQP * WBS" :bars="row3BarList" :highlight-on-hover="true" :labelstyle="subStyle"/>
+      <g-gantt-row label="KPI" :bars="row4BarList" :highlight-on-hover="true" :labelstyle="titleStyle"/>
+      <g-gantt-row label="CSR" :bars="row5BarList" :highlight-on-hover="true" :labelstyle="titleStyle"/>
+      <g-gantt-row label="PDM" :bars="row6BarList" :highlight-on-hover="true" :labelstyle="titleStyle"/>
+      <g-gantt-row label="PDM * QSR AI" :bars="row7BarList" :highlight-on-hover="true" :labelstyle="subStyle"/>
+      <g-gantt-row label="RM" :bars="row8BarList" :highlight-on-hover="true" :labelstyle="titleStyle"/>
+      <g-gantt-row label="PPAP" :bars="row9BarList" :highlight-on-hover="true" :labelstyle="titleStyle"/>
+      <g-gantt-row label="PRA" :bars="row10BarList" :highlight-on-hover="true" :labelstyle="titleStyle"/>
+      <g-gantt-row label="ECR 整合" :bars="row20BarList" :highlight-on-hover="true" :labelstyle="titleStyle"/>
+      <g-gantt-row label="ECR" :bars="row11BarList" :highlight-on-hover="true" :labelstyle="subStyle"/>
+      <g-gantt-row label="ECN" :bars="row12BarList" :highlight-on-hover="true" :labelstyle="subStyle"/>
+      <g-gantt-row label="CAR" :bars="row13BarList" :highlight-on-hover="true" :labelstyle="subStyle"/>
+      <g-gantt-row label="MES\ERP 整合" :bars="row20BarList" :highlight-on-hover="true" :labelstyle="titleStyle"/>
+      <g-gantt-row label="DS" :bars="row14BarList" :highlight-on-hover="true" :labelstyle="subStyle"/>
+      <g-gantt-row label="SUA" :bars="row15BarList" :highlight-on-hover="true" :labelstyle="subStyle"/>
+      <g-gantt-row label="PPM" :bars="row16BarList" :highlight-on-hover="true" :labelstyle="subStyle"/>
+    </g-gantt-chart>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue"
 import type { GanttBarObject } from "./types"
 import dayjs from "dayjs"
+import data from "./data.json"
 
-const format = ref("DD.MM.YYYY HH:mm")
-const chartStart = ref(dayjs().startOf("day").format(format.value))
-const chartEnd = ref(
-  dayjs(chartStart.value, format.value).add(3, "days").hour(12).format(format.value)
-)
-
-const bars1 = ref<GanttBarObject[]>([
-  {
-    beginDate: dayjs().hour(13).startOf("hour").format(format.value),
-    endDate: dayjs().hour(19).startOf("hour").format(format.value),
+const subStyle = ref({
+    backgroundColor: "white"
+});
+const titleStyle = ref({
+    justifyContent: "start", backgroundColor: "#E5E5E5", paddingLeft: "20px"
+});
+// border: "1px solid #c1c1c1",
+const rawdata = ref(data as any);
+console.log(rawdata.value)
+const row20BarList = ref([
+{
+    myBeginDate: "2025-01-01",
+    myEndDate: "2025-03-01",
     ganttBarConfig: {
-      id: "8621987329",
-      label: "I'm in a bundle",
-      bundle: "bundle2"
+        id: "bar2",
+        label: "100%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "#00bf63",
+        }
     }
-  }
-])
-
-const bars2 = ref([
-  {
-    beginDate: dayjs().hour(13).startOf("hour").format(format.value),
-    endDate: dayjs().hour(19).startOf("hour").format(format.value),
+}]);
+const row1BarList = ref([
+{
+    myBeginDate: "2024-01-01",
+    myEndDate: "2024-02-01",
     ganttBarConfig: {
-      id: "1592311887",
-      label: "I'm in a bundle",
-      bundle: "bundle2",
-      style: {
-        background: "magenta"
-      }
+        id: "bar1", 
+        label: "100%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "#00bf63",
+        }
     }
-  },
-  {
-    beginDate: dayjs().add(2, "day").hour(0).startOf("hour").format(format.value),
-    endDate: dayjs().add(2, "day").hour(19).startOf("hour").format(format.value),
+}]);
+// row1BarList.value.push({
+//     myBeginDate: "2024-05-01",
+//     myEndDate: "2024-07-01",
+//     ganttBarConfig: {
+//         id: "bar20", 
+//         label: "100%",
+//         hasHandles: true,
+//         style: {
+//             background: "#00bf63",
+//         }
+//     }
+// });
+const row2BarList = ref([
+{
+    myBeginDate: "2024-01-01",
+    myEndDate: "2024-03-01",
     ganttBarConfig: {
-      id: "7716981641",
-      label: "Lorem ipsum dolor",
-      hasHandles: true,
-      style: {
-        background: "#b74b52"
-      }
+        id: "bar2",
+        label: "100%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "#00bf63",
+        }
     }
-  },
-  {
-    beginDate: dayjs().add(1, "day").hour(4).startOf("hour").format(format.value),
-    endDate: dayjs().add(1, "day").hour(16).startOf("hour").format(format.value),
+}]);
+const row3BarList = ref([
+{
+    myBeginDate: "2024-04-15",
+    myEndDate: "2024-07-01",
     ganttBarConfig: {
-      id: "9716981641",
-      label: "Oh hey",
-      style: {
-        background: "#69e064",
-        borderRadius: "15px",
-        color: "blue",
-        fontSize: "10px"
-      }
+        id: "bar3", 
+        label: "100%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "#00bf63",
+        }
     }
-  }
-])
-
-const bars3 = [
-  {
-    beginDate: "15.01.2024 08:30",
-    endDate: "20.02.2024 16:45",
+}]);
+const row4BarList = ref([
+{
+    myBeginDate: "2024-03-01",
+    myEndDate: "2024-05-01",
     ganttBarConfig: {
-      id: "9876543210",
-      label: "Updated Bundle",
-      bundle: "bundle3",
-      style: {
-        background: "cyan"
-      }
+        id: "bar4", 
+        label: "100%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "#00bf63",
+        }
     }
-  },
-  {
-    beginDate: "20.02.2024 12:00",
-    endDate: "10.03.2024 18:30",
+}]);
+const row5BarList = ref([
+{
+    myBeginDate: "2024-04-01",
+    myEndDate: "2024-06-01",
     ganttBarConfig: {
-      id: "1234567890",
-      label: "New Task",
-      hasHandles: true,
-      style: {
-        background: "#f79466"
-      }
+        id: "bar5", 
+        label: "100%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "#00bf63",
+        }
     }
-  },
-  {
-    beginDate: "25.04.2024 09:15",
-    endDate: "30.04.2024 21:00",
+}]);
+const row6BarList = ref([
+{
+    myBeginDate: "2024-05-01",
+    myEndDate: "2024-07-15",
     ganttBarConfig: {
-      id: "2468135790",
-      label: "Greetings",
-      style: {
-        background: "#aabbcc",
-        borderRadius: "8px",
-        color: "white",
-        fontSize: "12px"
-      }
+        id: "bar6", 
+        label: "80%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "linear-gradient(90deg, #00bf63 0%, #00bf63 80%, #1b794c 80%, #1b794c 100%)",
+        }
     }
-  }
-]
-
-const bars4 = [
-  {
-    beginDate: "10.01.2024 08:00",
-    endDate: "15.03.2024 16:30",
+}]);
+const row7BarList = ref([
+{
+    myBeginDate: "2024-07-01",
+    myEndDate: "2024-12-31",
     ganttBarConfig: {
-      id: "9876543210",
-      label: "Novo Pacote",
-      bundle: "pacote3",
-      style: {
-        background: "pink"
-      }
+        id: "bar7", 
+        label: "20%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "linear-gradient(90deg, #ffde59 0%, #ffde59 20%, #ffbd59 20%, #ffbd59 100%)",
+        }
     }
-  },
-  {
-    beginDate: "05.03.2024 10:00",
-    endDate: "15.04.2024 22:15",
+}]);
+const row8BarList = ref([
+{
+    myBeginDate: "2024-06-01",
+    myEndDate: "2024-07-20",
     ganttBarConfig: {
-      id: "2468135790",
-      label: "hello folks",
-      style: {
-        background: "#ffd700",
-        borderRadius: "10px",
-        color: "black",
-        fontSize: "14px"
-      }
+        id: "bar8", 
+        label: "80%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "linear-gradient(90deg, #ffde59 0%, #ffde59 80%, #ffbd59 80%, #ffbd59 100%)",
+        }
     }
-  }
-]
-
-const addBar = () => {
-  if (bars1.value.some((bar) => bar.ganttBarConfig.id === "test1")) {
-    return
-  }
-  const bar = {
-    beginDate: dayjs().add(1, "day").hour(4).startOf("hour").format(format.value),
-    endDate: dayjs().add(2, "day").hour(4).startOf("hour").format(format.value),
+}]);
+const row9BarList = ref([
+{
+    myBeginDate: "2024-06-01",
+    myEndDate: "2024-07-20",
     ganttBarConfig: {
-      id: "test1",
-      hasHandles: true,
-      label: "Hello!",
-      style: {
-        background: "#5484b7",
-        borderRadius: "20px"
-      }
+        id: "bar9", 
+        label: "80%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "linear-gradient(90deg, #ffde59 0%, #ffde59 80%, #ffbd59 80%, #ffbd59 100%)",
+        }
     }
-  }
-  bars1.value.push(bar)
-}
+}]);
+const row10BarList = ref([
+{
+    myBeginDate: "2024-10-01",
+    myEndDate: "2024-12-31",
+    ganttBarConfig: {
+        id: "bar10", 
+        label: "0%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "#d9d9d9",
+        }
+    }
+}]);
+const row11BarList = ref([
+{
+    myBeginDate: "2024-07-15",
+    myEndDate: "2024-11-01",
+    ganttBarConfig: {
+        id: "bar11", 
+        label: "5%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "linear-gradient(90deg, #ffde59 0%, #ffde59 5%, #ffbd59 5%, #ffbd59 100%)",
+        }
+    }
+}]);
+const row12BarList = ref([
+{
+    myBeginDate: "2024-01-01",
+    myEndDate: "2024-07-01",
+    ganttBarConfig: {
+        id: "bar12", 
+        label: "100%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "#00bf63",
+        }
+    }
+}]);
+const row13BarList = ref([
+{
+    myBeginDate: "2024-04-15",
+    myEndDate: "2024-06-01",
+    ganttBarConfig: {
+        id: "bar13", 
+        label: "100%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "#00bf63",
+        }
+    }
+}]);
+const row14BarList = ref([
+{
+    myBeginDate: "2024-01-01",
+    myEndDate: "2024-03-01",
+    ganttBarConfig: {
+        id: "bar14", 
+        label: "100%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "#00bf63",
+        }
+    }
+}]);
+const row15BarList = ref([
+{
+    myBeginDate: "2024-01-01",
+    myEndDate: "2024-05-01",
+    ganttBarConfig: {
+        id: "bar15", 
+        label: "100%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "#00bf63",
+        }
+    }
+}]);
+const row16BarList = ref([
+{
+    myBeginDate: "2024-09-01",
+    myEndDate: "2024-11-01",
+    ganttBarConfig: {
+        id: "bar16", 
+        label: "0%",
+        // hasHandles: true,
+        immobile: true,
+        style: {
+            background: "#d9d9d9",
+        }
+    }
+}]);
 
-const deleteBar = () => {
-  const idx = bars1.value.findIndex((b) => b.ganttBarConfig.id === "test1")
-  if (idx !== -1) {
-    bars1.value.splice(idx, 1)
-  }
-}
-
-const onClickBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
-  console.log("click-bar", bar, e, datetime)
-}
-
-const onMousedownBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
-  console.log("mousedown-bar", bar, e, datetime)
-}
-
-const onMouseupBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
-  console.log("mouseup-bar", bar, e, datetime)
-}
-
-const onMouseenterBar = (bar: GanttBarObject, e: MouseEvent) => {
-  console.log("mouseenter-bar", bar, e)
-}
-
-const onMouseleaveBar = (bar: GanttBarObject, e: MouseEvent) => {
-  console.log("mouseleave-bar", bar, e)
-}
-
-const onDragstartBar = (bar: GanttBarObject, e: MouseEvent) => {
-  console.log("dragstart-bar", bar, e)
-}
-
-const onDragBar = (bar: GanttBarObject, e: MouseEvent) => {
-  console.log("drag-bar", bar, e)
-}
-
-const onDragendBar = (
-  bar: GanttBarObject,
-  e: MouseEvent,
-  movedBars?: Map<GanttBarObject, { oldStart: string; oldEnd: string }>
-) => {
-  console.log("dragend-bar", bar, e, movedBars)
-}
-
-const onContextmenuBar = (bar: GanttBarObject, e: MouseEvent, datetime?: string) => {
-  console.log("contextmenu-bar", bar, e, datetime)
-}
 </script>
+
+<style scoped lang="scss">
+:deep(.g-timeunits-container) {
+    width: auto;
+    .g-timeunit{
+        flex: 1;
+        font-size: 1rem;
+    }
+    @media screen and (max-width: 1644px) {
+        .g-timeunit{
+            font-size: 0.8rem;
+        }
+    }
+    @media screen and (max-width: 768px) {
+        .g-timeunit{
+            font-size: 0.5rem;
+        }
+    }
+}
+
+:deep(.g-gantt-rows-container) {
+    .g-gantt-row {
+        .g-gantt-row-label{
+            font-size: 1.2rem;
+            padding: 1rem;
+        }
+        .g-gantt-bar-label{
+            display: flex;
+            justify-content: flex-end;
+            color: white;
+            margin-right: 5px;
+        }
+    }
+}
+
+:deep(.g-label-column){
+  // width: 300px !important; src\components\GGanttChart.vue -> labelColumnWidth
+    .g-label-column-header{
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    .g-label-column-rows{
+        font-size: 1rem;
+        // background: #E5E5E5 !important; 
+        .g-label-column-row{
+            color: black;
+            font-weight: 600;
+            // border: 1px solid #c1c1c1;
+        }
+    }
+}
+
+</style>

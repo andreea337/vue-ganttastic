@@ -1,0 +1,19 @@
+[
+    {
+        "label": "APQP",
+        "bars":[
+            {
+                "myBeginDate": "2025-01-01",
+                "myEndDate": "2025-03-01",
+                "ganttBarConfig": {
+                    "id": "bar2",
+                    "label": "100%",
+                    "immobile": "true",
+                    "style": {
+                        "background": "#00bf63"
+                    }
+                }
+            }],
+        "labelstyle": "titlestyle"
+    }
+]

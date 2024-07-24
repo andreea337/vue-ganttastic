@@ -362,4 +362,20 @@ const row16BarList = ref([
     }
 }
 
+:deep(.g-labelgrid-column){
+  // width: 300px !important; src\components\GGanttChart.vue -> labelColumnWidth
+    .g-label-column-header{
+        font-size: 1.2rem;
+        font-weight: bold;
+    }
+    .g-label-column-rows{
+        font-size: 1rem;
+        // background: #E5E5E5 !important; 
+        .g-label-column-row{
+            color: black;
+            font-weight: 600;
+            // border: 1px solid #c1c1c1;
+        }
+    }
+}
 </style>

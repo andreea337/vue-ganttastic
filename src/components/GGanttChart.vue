@@ -14,6 +14,21 @@
           <slot name="label-column-row" :label="label" />
         </template>
       </g-gantt-label-column>
+      <!-- add column -->
+      <g-gantt-column
+        v-if="labelColumnTitle"
+        :style="{
+          width: labelColumnWidth
+        }"
+      >
+        <template #label-column-title>
+          <slot name="label-column-title" />
+        </template>
+        <template #label-column-row="{ label }">
+          <slot name="label-column-row" :label="label" />
+        </template>
+      </g-gantt-column>
+      <!-- add column -->
       <div
         ref="ganttChart"
         :class="['g-gantt-chart', { 'with-column': labelColumnTitle }]"
@@ -63,6 +78,7 @@ import {
 
 import GGanttGrid from "./GGanttGrid.vue"
 import GGanttLabelColumn from "./GGanttLabelColumn.vue"
+import GGanttColumn from "./GGanttColumn.vue"
 import GGanttTimeaxis from "./GGanttTimeaxis.vue"
 import GGanttBarTooltip from "./GGanttBarTooltip.vue"
 import GGanttCurrentTime from "./GGanttCurrentTime.vue"

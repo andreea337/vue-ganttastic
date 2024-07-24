@@ -41,6 +41,7 @@ const props = defineProps<{
   bars: GanttBarObject[] 
   highlightOnHover?: boolean
   labelStyle?: { type: Object }
+  columns?: [] 
 }>()
 
 // console.log('GGanttRow.vue props', props)

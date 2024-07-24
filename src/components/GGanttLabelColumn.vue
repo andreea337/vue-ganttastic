@@ -40,7 +40,7 @@ const getChartRows = provideGetChartRows()
 // console.log('GGanttLabelColumn.vue getChartRows', getChartRows())
 
 const getRowLabelStyle = (index: number, labelstyle: any) => {
-  // console.log('getRowLabelStyle', index, labelstyle)
+  // console.log('getRowLabelStyle', index, labelstyle, rowHeight)
   return {
     background: index % 2 === 0 ? colors.value.ternary : colors.value.quartenary,
     height: `${rowHeight}px`,
@@ -50,7 +50,7 @@ const getRowLabelStyle = (index: number, labelstyle: any) => {
 
 </script>
 
-<style>
+<style scoped>
 .g-label-column {
   display: flex;
   align-items: center;
